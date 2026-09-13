@@ -1,18 +1,19 @@
-name: Python CI
+name: CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  test:
-
+  build-and-docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -20,6 +21,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Check Python files
+      - name: Check Python code
         run: |
           python -m compileall .
+
+      - name: Build Docker image
+        run: |
+          docker build -t calculadora-tk:latest .
